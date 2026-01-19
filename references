@@ -1,7 +1,100 @@
-CVE-2023-43654
-GCP-2023-029
-Advisory de TorchServe 0.8.2
-Investigación de XM Cyber
-Documentación oficial de Vertex AI
-MITRE ATT&CK mappings
-Enlaces a PRs y advisories oficiales
+📄 CVE-2023-43654.md
+
+Título: TorchServe Remote Code Execution
+Descripción:
+Vulnerabilidad en TorchServe (≤ 0.8.1) que permite la carga de modelos desde URLs arbitrarias debido a validación insuficiente de entrada, lo que puede derivar en ejecución remota de código.
+CWE: CWE-918 – Server-Side Request Forgery (SSRF)
+Estado: Corregido en TorchServe 0.8.2
+Gravedad: CRITICAL (CVSS 9.8 – 10.0)
+
+📄 GCP-2023-029.md
+
+Título: Google Cloud – TorchServe en contenedores PyTorch de Vertex AI
+Descripción:
+Aviso de seguridad de Google Cloud relacionado con vulnerabilidades en TorchServe.
+Google indica que Vertex AI no expone la API de management por defecto, pero advierte sobre riesgos al usar TorchServe fuera de Vertex AI o con configuraciones personalizadas.
+Contexto: Uso indebido de configuraciones por defecto en entornos IA.
+
+📄 torchserve-0.8.2-advisory.md
+
+Título: TorchServe Security Advisory – Version 0.8.2
+Contenido clave:
+
+Cambio de management_address de 0.0.0.0 a 127.0.0.1
+
+Advertencias por uso de allowed_urls=*
+
+Eliminación de rutas de ejecución de código inseguras
+
+Recomendación oficial de actualización inmediata
+
+📄 xm-cyber-research.md
+
+Título: Privilege Escalation Paths in Google Vertex AI
+Autor: XM Cyber
+Hallazgos clave:
+
+Delegación implícita hacia Service Agents
+
+Abuso de Agent Engine y Ray on Vertex AI
+
+Acceso a metadatos desde shells interactivos
+
+Impacto en GCS, BigQuery y datos de LLM
+Conclusión: Los valores por defecto deben tratarse como riesgos, no como características.
+
+📄 vertex-ai-official-docs.md
+
+Fuentes documentadas:
+
+Vertex AI Agent Engine
+
+Reasoning Engines
+
+Ray on Vertex AI
+
+Persistent Resources
+
+Service Accounts & IAM
+
+Seguridad y hardening en Vertex AI
+
+Uso: Referencia para validar configuraciones seguras y comportamiento esperado.
+
+📄 mitre-attck-mapping.md
+
+Framework: MITRE ATT&CK (Enterprise + Cloud)
+
+Tácticas y Técnicas mapeadas:
+
+Initial Access – T1078 (Valid Accounts)
+
+Execution – T1059 (Command and Scripting Interpreter)
+
+Privilege Escalation – T1068 (Exploitation for Privilege Escalation)
+
+Credential Access – T1552.005 (Cloud Metadata API)
+
+Lateral Movement – T1021 (Remote Services)
+
+Collection – T1213 (Data from Cloud Storage)
+
+Exfiltration – T1567 (Web Services)
+
+Impact – T1496 (Resource Hijacking)
+
+📄 official-prs-and-advisories.md
+
+Enlaces documentados:
+
+TorchServe PR #2534 – Advertencia por allowed_urls
+
+TorchServe Release v0.8.2
+
+GitHub Security Advisory GHSA-8fxr-qfr9-p34w
+
+NVD – CVE-2023-43654
+
+Packet Storm – Análisis técnico TorchServe RCE
+
+Documentación de seguridad de Google Cloud
