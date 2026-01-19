@@ -1,0 +1,6 @@
+Resumen ejecutivo de la vulnerabilidad en Vertex AI
+Descripción de la cadena de ataque (Agent Engine y Ray on Vertex AI)
+Modelo de amenaza y escenarios de abuso
+Impacto potencial (GCS, BigQuery, LLM memories)
+Alcance y limitaciones de la PoC
+Consideraciones éticas y legales
