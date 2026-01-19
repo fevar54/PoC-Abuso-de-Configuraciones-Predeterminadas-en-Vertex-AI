@@ -1,5 +1,89 @@
-Ejemplo de configuración insegura (redactada)
-Ejemplo de configuración segura recomendada
-Comparación default vs hardened
-Plantillas de roles IAM personalizados
-Configuración correcta de allowed_urls y management_address
+🔴 Ejemplo de configuración insegura (redactada)
+# Vertex AI – Reasoning Engine (INSEGURA)
+reasoningEngine:
+  permissions:
+    - aiplatform.reasoningEngines.update
+  tools:
+    allowDynamicCode: true
+    sourceValidation: disabled
+  serviceAccount: service-<project>@gcp-sa-aiplatform-re.iam.gserviceaccount.com
+
+# Ray on Vertex AI – Persistent Resource (INSEGURA)
+rayCluster:
+  iamRoles:
+    - roles/aiplatform.viewer
+  interactiveShell:
+    enabled: true
+  metadataServer:
+    access: unrestricted
+
+# TorchServe (INSEGURA)
+management_address=0.0.0.0
+allowed_urls=*
+
+🟢 Ejemplo de configuración segura recomendada
+# Vertex AI – Reasoning Engine (SEGURA)
+reasoningEngine:
+  permissions:
+    - aiplatform.reasoningEngines.get
+  tools:
+    allowDynamicCode: false
+    sourceValidation: enabled
+    codeReviewRequired: true
+  serviceAccount: custom-vertex-re-sa@project.iam.gserviceaccount.com
+
+# Ray on Vertex AI – Persistent Resource (SEGURA)
+rayCluster:
+  iamRoles:
+    - roles/aiplatform.user
+  interactiveShell:
+    enabled: false
+  metadataServer:
+    access: restricted
+
+# TorchServe (SEGURA)
+management_address=127.0.0.1
+allowed_urls=https://storage.googleapis.com/my-approved-model-bucket/*
+
+⚖️ Comparación: Default vs Hardened
+Componente	Default	Hardened
+Agent Engine tools	Código dinámico permitido	Código estático validado
+Update permissions	Viewer puede actualizar	Solo rol personalizado
+Ray shell	Habilitada	Deshabilitada
+Metadata access	Sin restricción	Controlado
+TorchServe API	Expuesta	Solo localhost
+allowed_urls	Wildcard	URLs explícitas
+🧩 Plantillas de roles IAM personalizados
+🔐 Rol: Vertex AI Restricted Viewer
+title: VertexAIRestrictedViewer
+description: Acceso de solo lectura sin capacidades de abuso
+includedPermissions:
+  - aiplatform.reasoningEngines.get
+  - aiplatform.persistentResources.get
+excludedPermissions:
+  - aiplatform.reasoningEngines.update
+  - aiplatform.persistentResources.list
+  - iam.serviceAccounts.actAs
+
+🔐 Rol: Vertex AI Secure Operator
+title: VertexAISecureOperator
+description: Operador controlado con mínimos privilegios
+includedPermissions:
+  - aiplatform.jobs.create
+  - aiplatform.jobs.get
+  - aiplatform.endpoints.predict
+excludedPermissions:
+  - aiplatform.reasoningEngines.update
+  - iam.serviceAccounts.signBlob
+
+⚙️ Configuración correcta de TorchServe
+# Mitigación CVE-2023-43654
+
+# Nunca exponer la API de management
+management_address=127.0.0.1
+
+# Restringir modelos solo a ubicaciones confiables
+allowed_urls=https://storage.googleapis.com/vertex-approved-models/*
+
+# Versión mínima segura
+torchserve.version>=0.8.2
