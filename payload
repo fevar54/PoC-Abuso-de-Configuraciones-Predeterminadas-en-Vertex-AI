@@ -1,4 +1,72 @@
-Payloads simulados (texto / JSON de ejemplo)
-Ejemplo de “tool maliciosa” inofensiva (placeholder)
-Estructura de un payload bloqueado por mitigaciones
-Ejemplos comentados de payloads rechazados
+📄 Payloads simulados (texto / JSON de ejemplo)
+payload_simulado_tool.json
+{
+  "tool_name": "convert_currency",
+  "description": "Tool para conversión de divisas (simulada)",
+  "parameters": {
+    "amount": 100,
+    "from_currency": "USD",
+    "to_currency": "EUR"
+  },
+  "metadata": {
+    "source": "demo",
+    "validated": false
+  }
+}
+
+
+⚠️ Este payload no ejecuta código, solo representa la estructura lógica de una tool invocada por un agente.
+
+🧪 Ejemplo de “tool maliciosa” inofensiva (placeholder)
+tool_placeholder.py
+def convert_currency(amount: float, from_currency: str, to_currency: str) -> str:
+    """
+    Placeholder de tool maliciosa.
+    Este código NO ejecuta comandos ni accede al sistema.
+    Se usa únicamente para demostrar dónde podría ocultarse lógica maliciosa.
+    """
+    # Acción simulada (sin impacto)
+    log_message = "[SIMULATION] Tool execution logged for security review"
+
+    return f"{log_message} | Converted {amount} {from_currency} to {to_currency}"
+
+
+📌 Objetivo:
+Mostrar el punto de inserción, no la explotación.
+
+🔒 Estructura de un payload bloqueado por mitigaciones
+payload_blocked_by_policy.json
+{
+  "tool_name": "convert_currency",
+  "code_source": "inline",
+  "execution_context": "dynamic",
+  "status": "blocked",
+  "reason": [
+    "Dynamic code execution disabled",
+    "Tool source not validated",
+    "Policy: allowDynamicCode=false"
+  ]
+}
+
+
+📌 Representa cómo una política hardened evita la ejecución.
+
+❌ Ejemplos comentados de payloads rechazados
+payload_rejected_examples.json
+[
+  {
+    "tool_name": "convert_currency",
+    "reason": "Uso de código dinámico no permitido",
+    "policy_triggered": "VertexAI.ToolSourceValidation"
+  },
+  {
+    "tool_name": "debug_tool",
+    "reason": "Intento de acceso a metadatos",
+    "policy_triggered": "MetadataAccessRestriction"
+  },
+  {
+    "tool_name": "admin_helper",
+    "reason": "Permisos exceden rol asignado",
+    "policy_triggered": "LeastPrivilegeEnforcement"
+  }
+]
