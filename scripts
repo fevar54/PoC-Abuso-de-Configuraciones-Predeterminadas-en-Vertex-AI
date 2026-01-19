@@ -1,0 +1,5 @@
+Scripts de auditoría de permisos IAM (read-only)
+Script de detección de configuraciones inseguras
+Script de validación de exposición de TorchServe (sin explotación)
+Scripts de logging y evidencia
+Scripts comentados con # DEMO ONLY
